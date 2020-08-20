@@ -3,15 +3,15 @@ import 'package:todo_app/services/database.dart';
 
 class ListController {
   final Database database;
-  List<TodoModel> todoList = List();
+  List<TodoModel> todoList = <TodoModel>[];
 
   ListController({this.database});
 
-  void addTodo(TodoModel todo) {
+  void addTodo({TodoModel todo}) {
     todoList.add(todo);
   }
 
-  void checkboxSelected(bool newValue, int index) {
+  void checkboxSelected({bool newValue, int index}) {
     todoList[index].done = newValue;
   }
 

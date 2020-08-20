@@ -15,7 +15,7 @@ class _TodoCardState extends State<TodoCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Row(
@@ -23,7 +23,7 @@ class _TodoCardState extends State<TodoCard> {
             Expanded(
               child: Text(
                 widget.listController.todoList[widget.index].content,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
                 ),
@@ -32,7 +32,8 @@ class _TodoCardState extends State<TodoCard> {
             Checkbox(
               value: widget.listController.todoList[widget.index].done,
               onChanged: (newValue) {
-                widget.listController.checkboxSelected(newValue, widget.index);
+                widget.listController
+                    .checkboxSelected(newValue: newValue, index: widget.index);
                 setState(() {});
                 //Database().updateTodo(newValue, uid, todo.todoId);
               },

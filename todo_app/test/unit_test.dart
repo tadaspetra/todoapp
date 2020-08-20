@@ -7,7 +7,7 @@ import 'package:todo_app/services/database.dart';
 class MockDatabase extends Mock implements Database {}
 
 void main() {
-  MockDatabase _mockDatabase = MockDatabase();
+  final MockDatabase _mockDatabase = MockDatabase();
   ListController _listController;
   setUp(() {
     _listController = ListController(database: _mockDatabase);
@@ -21,22 +21,24 @@ void main() {
   });
 
   test("Todo Added", () {
-    _listController.addTodo(TodoModel("Get Groceries", false));
+    _listController.addTodo(
+        todo: TodoModel(content: "Get Groceries", done: false));
     expect(_listController.todoList.length, 1);
     expect(_listController.todoList[0].content, "Get Groceries");
   });
 
   test("Checkbox Selected", () {
-    _listController.addTodo(TodoModel("Get Groceries", false));
+    _listController.addTodo(
+        todo: TodoModel(content: "Get Groceries", done: false));
     expect(_listController.todoList[0].done, false);
-    _listController.checkboxSelected(true, 0);
+    _listController.checkboxSelected(newValue: true, index: 0);
     expect(_listController.todoList[0].done, true);
   });
 
   test("Mock Database call", () async {
     when(_mockDatabase.loadDatabase()).thenAnswer(
       (realInvocation) => Future.value(
-        TodoModel("From Mock", true),
+        TodoModel(content: "From Mock", done: true),
       ),
     );
     await _listController.loadFromDatabase();

@@ -17,15 +17,15 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("List App"),
+        title: const Text("List App"),
         centerTitle: true,
       ),
       body: Column(
         children: <Widget>[
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
-          Text(
+          const Text(
             "Add Todo Here:",
             style: TextStyle(
               fontSize: 20,
@@ -33,7 +33,7 @@ class _HomeState extends State<Home> {
             ),
           ),
           Card(
-            margin: EdgeInsets.all(20),
+            margin: const EdgeInsets.all(20),
             child: Padding(
               padding: const EdgeInsets.all(10.0),
               child: Row(
@@ -44,11 +44,15 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                   IconButton(
-                    icon: Icon(Icons.add),
+                    icon: const Icon(Icons.add),
                     onPressed: () {
                       if (_todoController.text != "") {
-                        listController
-                            .addTodo(TodoModel(_todoController.text, false));
+                        listController.addTodo(
+                          todo: TodoModel(
+                            content: _todoController.text,
+                            done: false,
+                          ),
+                        );
                         //Database()
                         //.addTodo(_todoController.text, controller.user.uid);
                         _todoController.clear();
@@ -60,20 +64,20 @@ class _HomeState extends State<Home> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           RaisedButton(
-            child: Text("Load Todo from Database"),
             onPressed: () {
               listController.loadFromDatabase();
               setState(() {});
             },
+            child: const Text("Load Todo from Database"),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
-          Text(
+          const Text(
             "Your Todos",
             style: TextStyle(
               fontSize: 20,
