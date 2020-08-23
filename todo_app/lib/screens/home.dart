@@ -1,17 +1,23 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:todo_app/controllers/list_controller.dart';
 import 'package:todo_app/models/todo.dart';
+import 'package:todo_app/services/auth.dart';
 import 'package:todo_app/services/database.dart';
 import 'package:todo_app/widgets/todo_card.dart';
 
 class Home extends StatefulWidget {
+  final FirebaseAuth auth;
+  final FirebaseFirestore firestore;
+
+  const Home({Key key, @required this.auth, @required this.firestore})
+      : super(key: key);
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
   final TextEditingController _todoController = TextEditingController();
-  ListController listController = ListController(database: Database());
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +25,14 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: const Text("List App"),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.exit_to_app),
+            onPressed: () {
+              Auth(auth: widget.auth).signOut();
+            },
+          )
+        ],
       ),
       body: Column(
         children: <Widget>[
@@ -47,32 +61,18 @@ class _HomeState extends State<Home> {
                     icon: const Icon(Icons.add),
                     onPressed: () {
                       if (_todoController.text != "") {
-                        listController.addTodo(
-                          todo: TodoModel(
-                            content: _todoController.text,
-                            done: false,
-                          ),
-                        );
-                        //Database()
-                        //.addTodo(_todoController.text, controller.user.uid);
-                        _todoController.clear();
-                        setState(() {});
+                        setState(() {
+                          Database(firestore: widget.firestore).addTodo(
+                              uid: widget.auth.currentUser.uid,
+                              content: _todoController.text);
+                          _todoController.clear();
+                        });
                       }
                     },
                   )
                 ],
               ),
             ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          RaisedButton(
-            onPressed: () {
-              listController.loadFromDatabase();
-              setState(() {});
-            },
-            child: const Text("Load Todo from Database"),
           ),
           const SizedBox(
             height: 20,
@@ -85,13 +85,35 @@ class _HomeState extends State<Home> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: listController.todoList.length,
-              itemBuilder: (_, index) {
-                return TodoCard(index: index, listController: listController);
+            child: StreamBuilder(
+              stream: Database(firestore: widget.firestore)
+                  .streamTodos(uid: widget.auth.currentUser.uid),
+              builder: (BuildContext context,
+                  AsyncSnapshot<List<TodoModel>> snapshot) {
+                if (snapshot.connectionState == ConnectionState.active) {
+                  if (snapshot.data.isEmpty) {
+                    return const Center(
+                      child: Text("You don't have any unfinished Todos"),
+                    );
+                  }
+                  return ListView.builder(
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (_, index) {
+                      return TodoCard(
+                        firestore: widget.firestore,
+                        uid: widget.auth.currentUser.uid,
+                        todo: snapshot.data[index],
+                      );
+                    },
+                  );
+                } else {
+                  return const Center(
+                    child: Text("loading..."),
+                  );
+                }
               },
             ),
-          )
+          ),
         ],
       ),
     );

@@ -1,11 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:todo_app/controllers/list_controller.dart';
+import 'package:todo_app/models/todo.dart';
+import 'package:todo_app/services/database.dart';
 
 class TodoCard extends StatefulWidget {
-  final int index;
-  final ListController listController;
+  final TodoModel todo;
+  final FirebaseFirestore firestore;
+  final String uid;
 
-  const TodoCard({Key key, this.index, this.listController}) : super(key: key);
+  const TodoCard({Key key, this.todo, this.firestore, this.uid})
+      : super(key: key);
 
   @override
   _TodoCardState createState() => _TodoCardState();
@@ -22,7 +26,7 @@ class _TodoCardState extends State<TodoCard> {
           children: [
             Expanded(
               child: Text(
-                widget.listController.todoList[widget.index].content,
+                widget.todo.content,
                 style: const TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
@@ -30,11 +34,13 @@ class _TodoCardState extends State<TodoCard> {
               ),
             ),
             Checkbox(
-              value: widget.listController.todoList[widget.index].done,
+              value: widget.todo.done,
               onChanged: (newValue) {
-                widget.listController
-                    .checkboxSelected(newValue: newValue, index: widget.index);
                 setState(() {});
+                Database(firestore: widget.firestore).updateTodo(
+                  uid: widget.uid,
+                  todoId: widget.todo.todoId,
+                );
                 //Database().updateTodo(newValue, uid, todo.todoId);
               },
             ),
