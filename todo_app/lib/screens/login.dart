@@ -47,18 +47,17 @@ class _LoginState extends State<Login> {
                 RaisedButton(
                   key: const ValueKey("signIn"),
                   onPressed: () async {
-                    final String returnValue =
-                        await Auth(auth: widget.auth).signIn(
+                    final String retVal = await Auth(auth: widget.auth).signIn(
                       email: _emailController.text,
                       password: _passwordController.text,
                     );
-                    if (returnValue == "Success") {
+                    if (retVal == "Success") {
                       _emailController.clear();
                       _passwordController.clear();
                     } else {
                       Scaffold.of(context).showSnackBar(
                         SnackBar(
-                          content: Text(returnValue),
+                          content: Text(retVal),
                         ),
                       );
                     }
@@ -68,18 +67,18 @@ class _LoginState extends State<Login> {
                 FlatButton(
                   key: const ValueKey("createAccount"),
                   onPressed: () async {
-                    final String returnValue =
+                    final String retVal =
                         await Auth(auth: widget.auth).createAccount(
                       email: _emailController.text,
                       password: _passwordController.text,
                     );
-                    if (returnValue == "Success") {
+                    if (retVal == "Success") {
                       _emailController.clear();
                       _passwordController.clear();
                     } else {
                       Scaffold.of(context).showSnackBar(
                         SnackBar(
-                          content: Text(returnValue),
+                          content: Text(retVal),
                         ),
                       );
                     }

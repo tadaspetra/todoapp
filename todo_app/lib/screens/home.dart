@@ -10,8 +10,8 @@ class Home extends StatefulWidget {
   final FirebaseAuth auth;
   final FirebaseFirestore firestore;
 
-  const Home({Key key, @required this.auth, @required this.firestore})
-      : super(key: key);
+  const Home({Key key, this.auth, this.firestore}) : super(key: key);
+
   @override
   _HomeState createState() => _HomeState();
 }
@@ -23,7 +23,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("List App"),
+        title: const Text("Amateur Coder Todo"),
         centerTitle: true,
         actions: [
           IconButton(
@@ -100,7 +100,6 @@ class _HomeState extends State<Home> {
                     );
                   }
                   return ListView.builder(
-                    key: const ValueKey("todoList"),
                     itemCount: snapshot.data.length,
                     itemBuilder: (_, index) {
                       return TodoCard(

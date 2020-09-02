@@ -1,3 +1,4 @@
+// Imports the Flutter Driver API.
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
@@ -39,7 +40,9 @@ void main() {
         driver.close();
       }
     });
-    test('create account!', () async {
+
+    test('create account', () async {
+      //if there is a sign out button present.
       if (await isPresent(signOutButton)) {
         await driver.tap(signOutButton);
       }
@@ -50,10 +53,10 @@ void main() {
       await driver.enterText("123456");
 
       await driver.tap(createAccountButton);
-      await driver.waitFor(find.text('Your Todos'));
+      await driver.waitFor(find.text("Your Todos"));
     });
 
-    test('login!', () async {
+    test('login', () async {
       if (await isPresent(signOutButton)) {
         await driver.tap(signOutButton);
       }
@@ -64,17 +67,19 @@ void main() {
       await driver.enterText("123456");
 
       await driver.tap(signInButton);
-      await driver.waitFor(find.text('Your Todos'));
+      await driver.waitFor(find.text("Your Todos"));
     });
 
     test('add a todo', () async {
       if (await isPresent(signOutButton)) {
         await driver.tap(addField);
-        await driver.enterText("make a video");
+        await driver.enterText("make a video for freecodecamp");
         await driver.tap(addButton);
 
-        await driver.waitFor(find.text("make a video"),
-            timeout: const Duration(seconds: 3));
+        await driver.waitFor(
+          find.text("make a video for freecodecamp"),
+          timeout: const Duration(seconds: 3),
+        );
       }
     });
   });

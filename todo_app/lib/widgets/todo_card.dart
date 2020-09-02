@@ -41,7 +41,6 @@ class _TodoCardState extends State<TodoCard> {
                   uid: widget.uid,
                   todoId: widget.todo.todoId,
                 );
-                //Database().updateTodo(newValue, uid, todo.todoId);
               },
             ),
           ],
