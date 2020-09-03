@@ -30,11 +30,13 @@ class _LoginState extends State<Login> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextFormField(
+                  key: const ValueKey("username"),
                   textAlign: TextAlign.center,
                   decoration: const InputDecoration(hintText: "Username"),
                   controller: _emailController,
                 ),
                 TextFormField(
+                  key: const ValueKey("password"),
                   textAlign: TextAlign.center,
                   decoration: const InputDecoration(hintText: "Password"),
                   controller: _passwordController,
@@ -43,19 +45,19 @@ class _LoginState extends State<Login> {
                   height: 20,
                 ),
                 RaisedButton(
+                  key: const ValueKey("signIn"),
                   onPressed: () async {
-                    final String returnValue =
-                        await Auth(auth: widget.auth).signIn(
+                    final String retVal = await Auth(auth: widget.auth).signIn(
                       email: _emailController.text,
                       password: _passwordController.text,
                     );
-                    if (returnValue == "Success") {
+                    if (retVal == "Success") {
                       _emailController.clear();
                       _passwordController.clear();
                     } else {
                       Scaffold.of(context).showSnackBar(
                         SnackBar(
-                          content: Text(returnValue),
+                          content: Text(retVal),
                         ),
                       );
                     }
@@ -63,19 +65,20 @@ class _LoginState extends State<Login> {
                   child: const Text("Sign In"),
                 ),
                 FlatButton(
+                  key: const ValueKey("createAccount"),
                   onPressed: () async {
-                    final String returnValue =
+                    final String retVal =
                         await Auth(auth: widget.auth).createAccount(
                       email: _emailController.text,
                       password: _passwordController.text,
                     );
-                    if (returnValue == "Success") {
+                    if (retVal == "Success") {
                       _emailController.clear();
                       _passwordController.clear();
                     } else {
                       Scaffold.of(context).showSnackBar(
                         SnackBar(
-                          content: Text(returnValue),
+                          content: Text(retVal),
                         ),
                       );
                     }
