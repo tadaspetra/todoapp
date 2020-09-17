@@ -3,17 +3,19 @@ import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('Counter App', () {
+  group('Todo App', () {
     // First, define the Finders and use them to locate widgets from the
     // test suite. Note: the Strings provided to the `byValueKey` method must
     // be the same as the Strings we used for the Keys in step 1.
+
+    //login screen
     final usernameField = find.byValueKey('username');
     final passwordField = find.byValueKey('password');
     final signInButton = find.byValueKey('signIn');
     final createAccountButton = find.byValueKey('createAccount');
 
-    final signOutButton = find.byValueKey("signOut");
-
+    //home screen
+    final signOutButton = find.byValueKey('signOut');
     final addField = find.byValueKey('addField');
     final addButton = find.byValueKey('addButton');
 
@@ -42,13 +44,13 @@ void main() {
     });
 
     test('create account', () async {
-      //if there is a sign out button present.
       if (await isPresent(signOutButton)) {
         await driver.tap(signOutButton);
       }
 
       await driver.tap(usernameField);
       await driver.enterText("tadas1@gmail.com");
+
       await driver.tap(passwordField);
       await driver.enterText("123456");
 
@@ -63,6 +65,7 @@ void main() {
 
       await driver.tap(usernameField);
       await driver.enterText("tadas1@gmail.com");
+
       await driver.tap(passwordField);
       await driver.enterText("123456");
 
@@ -73,13 +76,11 @@ void main() {
     test('add a todo', () async {
       if (await isPresent(signOutButton)) {
         await driver.tap(addField);
-        await driver.enterText("make a video for freecodecamp");
+        await driver.enterText("make an integration test video");
         await driver.tap(addButton);
 
-        await driver.waitFor(
-          find.text("make a video for freecodecamp"),
-          timeout: const Duration(seconds: 3),
-        );
+        await driver.waitFor(find.text("make an integration test video"),
+            timeout: const Duration(seconds: 3));
       }
     });
   });
